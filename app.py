@@ -63,7 +63,6 @@ def main(feature_categories):
     st.title('Disease Prediction System')
     st.write('We are sad that you or your loved ones are unwell, thank you for choosing us toward your healing journey.')
 
-
     # Prediction form
     st.subheader('Select Symptoms')
     
@@ -107,6 +106,13 @@ def main(feature_categories):
     # Add button to clear input selections
     if st.button("Clear Input"):
         selected_features.clear()
+
+    # Conversation tool in the side panel
+    st.sidebar.title("Chat with a Professional")
+    message = st.sidebar.text_area("Type your message here:")
+    if st.sidebar.button("Send"):
+        # Process the user's message (you can implement this part)
+        pass
 
 if __name__ == '__main__':
     if len(feature_categories) == 0:
