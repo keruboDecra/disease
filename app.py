@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 from joblib import load
 
@@ -50,7 +49,7 @@ feature_categories = {
 }
 
 # Create a Streamlit app
-def main():
+def main(feature_categories):
     # Define selected_features outside the main function
     selected_features = []
 
@@ -71,14 +70,16 @@ def main():
             st.error('Please select at least one symptom.')
         else:
             # Create feature vector based on selected symptoms
-            feature_vector = np.zeros(len(all_features))
+            feature_vector = np.zeros(sum(len(features) for features in feature_categories.values()))
             for symptom in selected_features:
-                index = all_features.index(symptom)
-                feature_vector[index] = 1
+                for features in feature_categories.values():
+                    if symptom in features:
+                        index = features.index(symptom)
+                        feature_vector[sum(len(features) for features in feature_categories.values())] = 1
 
             # Predict disease using the model
             prediction = best_model.predict([feature_vector])
             st.success(f'Predicted Disease: {prediction[0]}')
 
 if __name__ == '__main__':
-    main()
+    main(feature_categories)
