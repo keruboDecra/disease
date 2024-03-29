@@ -56,13 +56,10 @@ feature_categories = {
 }
 
 # Create a Streamlit app
-def main(feature_categories):
+def main():
     # Define selected_features outside the main function
     selected_features = []
     
-    # Cache for storing prediction result and selected symptoms
-    prediction_cache = st.cache(allow_output_mutation=True)
-
     # Sidebar for adjusting threshold
     threshold = st.sidebar.slider('Threshold', min_value=0.0, max_value=1.0, value=0.5, step=0.01)
 
@@ -92,19 +89,17 @@ def main(feature_categories):
         prediction_probabilities = best_model.predict_proba([feature_vector])[0]
         
         # Output prediction based on adjusted threshold
-        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob >= threshold]
-        st.write("Predicted Diseases:", predicted_diseases)
-
-        # Recommendation for additional symptoms
-        if len(selected_features) < 4:
-            st.write("We recommend selecting more symptoms for accurate results.")
+        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
         
-        # Update threshold value in session state
-        session_state.threshold = threshold
+        st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
+        
+        if len(selected_features) < 4:
+            st.warning('For accurate prediction, please select at least 4 symptoms.')
+            st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
 
-# Class for tracking threshold value across sessions
-class SessionState:
-    threshold = 0.5
+    # Clear button for clearing existing input
+    if st.button('Clear Input'):
+        st.caching.clear_cache()
 
 if __name__ == '__main__':
-    main(feature_categories)
+    main()
