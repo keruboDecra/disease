@@ -1,0 +1,10 @@
+numpy
+pandas
+statsmodels
+Pillow
+streamlit
+nltk
+scikit-learn==1.2.2
+joblib==1.3.2
+scipy
+threadpoolctl
