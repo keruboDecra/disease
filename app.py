@@ -61,6 +61,8 @@ def main(feature_categories):
     selected_features = []
 
     st.title('Disease Prediction System')
+    st.write('We are sad that you or your loved ones are unwell, thank you for choosing us toward your healing journey.')
+
 
     # Prediction form
     st.subheader('Select Symptoms')
@@ -99,7 +101,7 @@ def main(feature_categories):
             st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
             
             if 1 <= len(selected_features) < 4:
-                st.warning('Are you experiencing any other symptom? We recommend that you add it so we don't miss the accurate prediction. More than 4 symptoms tend to improve accuracy')
+                st.warning("Are you experiencing any other symptom? We recommend that you add it so we don't miss the accurate prediction. More than 4 symptoms tend to improve accuracy")
                 st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis. Get well soon!")
     
     # Add button to clear input selections
