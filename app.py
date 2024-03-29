@@ -1,3 +1,7 @@
+import warnings
+warnings.filterwarnings("ignore", message="X does not have valid feature names")
+
+
 import streamlit as st
 import pandas as pd
 import numpy as np
