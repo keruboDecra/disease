@@ -9,3 +9,9 @@ Project Team:
 3. Tafara Kasparov
 
 Video Walkthrough:
+https://drive.google.com/file/d/1p3yCjHie53NHhcxUIta7M3l2mgKd5mFv/view?usp=sharing
+
+Project Dataset
+https://colab.research.google.com/corgiredirector?site=http%3A%2F%2Fpeople.dbmi.columbia.edu%2F%7Efriedma%2FProjects%2FDiseaseSymptomKB%2Findex.html
+
+We are leveraging on Machine Learning to mine data from patterns observed in users' symptoms. The accuracy of the project is at 0.99% indicating strong perfomance
