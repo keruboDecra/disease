@@ -67,7 +67,7 @@ def main(feature_categories):
     
     for category, features in feature_categories.items():
         # Add a collapsible section for each category
-        with st.beta_expander(category):
+        with st.expander(category):
             for i, feature in enumerate(features, start=1):
                 selected = st.checkbox(feature, key=f"{category}-{i}")
                 if selected:
