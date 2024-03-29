@@ -77,27 +77,30 @@ def main(feature_categories):
     threshold = st.slider("Threshold", min_value=0.1, max_value=0.9, value=0.5, step=0.1, format="%.1f")
     
     if st.button('Predict'):
-        # Create feature vector based on selected symptoms
-        feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
-        for symptom in selected_features:
-            for category_features in feature_categories.values():
-                if symptom in category_features:
-                    index = category_features.index(symptom)
-                    feature_vector[index] = 1
+        # Check if at least one symptom is selected
+        if len(selected_features) == 0:
+            st.warning("Please select at least one symptom.")
+        else:
+            # Create feature vector based on selected symptoms
+            feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
+            for symptom in selected_features:
+                for category_features in feature_categories.values():
+                    if symptom in category_features:
+                        index = category_features.index(symptom)
+                        feature_vector[index] = 1
 
-        # Predict disease using the model
-        prediction_probabilities = best_model.predict_proba([feature_vector])[0]
-        
-        # Set a threshold probability for prediction
-        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
-        
-        # Output prediction even if less than 4 symptoms are selected
-        st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
-        
-        if 1 >= len(selected_features) < 4:
-
-            st.warning('For accurate prediction, please select at least 4 symptoms.')
-            st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
+            # Predict disease using the model
+            prediction_probabilities = best_model.predict_proba([feature_vector])[0]
+            
+            # Set a threshold probability for prediction
+            predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
+            
+            # Output prediction even if less than 4 symptoms are selected
+            st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
+            
+            if 1 <= len(selected_features) < 4:
+                st.warning('For accurate prediction, please select at least 4 symptoms.')
+                st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
     
     # Add button to clear input selections
     if st.button("Clear Input"):
