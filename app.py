@@ -103,4 +103,7 @@ def main(feature_categories):
         selected_features.clear()
 
 if __name__ == '__main__':
-    main(feature_categories)
+    if len(feature_categories) == 0:
+        st.warning("Please select at least one symptom.")
+    else:
+        main(feature_categories)
