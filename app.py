@@ -72,10 +72,10 @@ def main(feature_categories):
             # Create feature vector based on selected symptoms
             feature_vector = np.zeros(sum(len(features) for features in feature_categories.values()))
             for symptom in selected_features:
-                for features in feature_categories.values():
-                    if symptom in features:
-                        index = features.index(symptom)
-                        feature_vector[sum(len(features) for features in feature_categories.values())] = 1
+                for category_features in feature_categories.values():
+                    if symptom in category_features:
+                        index = category_features.index(symptom)
+                        feature_vector[index] = 1
 
             # Predict disease using the model
             prediction = best_model.predict([feature_vector])
