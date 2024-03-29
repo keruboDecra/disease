@@ -9,43 +9,50 @@ warnings.filterwarnings("ignore", message="X does not have valid feature names")
 # Load the best model
 best_model = load('best_model.joblib')
 
-# Define feature categories
+# Define feature categories and their respective features
 feature_categories = {
-    "Symptoms": [
-        'loss_of_smell', 'internal_itching', 'hip_joint_pain', 'increased_appetite', 'malaise', 
-        'inflammatory_nails', 'enlarged_thyroid', 'blood_in_sputum', 'yellow_crust_ooze', 
-        'nodal_skin_eruptions', 'unsteadiness', 'irritability', 'weight_loss', 
-        'prominent_veins_on_calf', 'fluid_overload.1', 'depression', 'lack_of_concentration', 
-        'muscle_pain', 'mild_fever', 'neck_pain', 'altered_sensorium', 'back_pain', 
-        'slurred_speech', 'movement_stiffness', 'shivering', 'belly_pain', 
-        'continuous_feel_of_urine', 'itching', 'rusty_sputum', 'receiving_unsterile_injections', 
-        'patches_in_throat', 'dark_urine', 'nausea', 'family_history', 'stomach_pain', 
-        'loss_of_appetite', 'stomach_bleeding', 'pus_filled_pimples', 'bloody_stool', 
-        'sunken_eyes', 'breathlessness', 'dischromic_patches', 'abdominal_pain', 
-        'continuous_sneezing', 'knee_pain', 'dehydration', 'blackheads', 'sweating', 
-        'burning_micturition', 'joint_pain', 'weakness_of_one_body_side', 
-        'red_spots_over_body', 'extra_marital_contacts', 'chest_pain', 'spinning_movements', 
-        'diarrhoea', 'bladder_discomfort', 'high_fever', 'red_sore_around_nose', 
-        'yellowing_of_eyes', 'yellowish_skin', 'watering_from_eyes', 'indigestion', 
-        'headache', 'skin_peeling', 'constipation', 'scurring', 'pain_behind_the_eyes', 
-        'silver_like_dusting', 'cough', 'vomiting', 'skin_rash', 'blister', 
-        'small_dents_in_nails', 'chills', 'acidity', 'ulcers_on_tongue', 
-        'muscle_wasting', 'spotting_urination', 'irregular_sugar_level', 'fatigue', 
-        'weight_gain', 'anxiety', 'cold_hands_and_feets', 'mood_swings', 'restlessness', 
-        'lethargy', 'yellow_urine', 'throat_irritation', 'acute_liver_failure', 
-        'loss_of_balance', 'excessive_hunger', 'drying_and_tingling_lips', 'palpitations', 
-        'history_of_alcohol_consumption', 'muscle_weakness', 'stiff_neck', 'swelling_joints', 
-        'distention_of_abdomen', 'coma', 'brittle_nails', 'foul_smell_of_urine', 
-        'passage_of_gases', 'receiving_blood_transfusion', 'toxic_look_typhos', 
-        'visual_disturbances', 'mucoid_sputum', 'polyuria', 'abnormal_menstruation', 
-        'swollen_extremeties', 'painful_walking', 'fluid_overload', 'weakness_in_limbs', 
-        'swelling_of_stomach', 'swelled_lymph_nodes', 'blurred_and_distorted_vision', 
-        'phlegm', 'redness_of_eyes', 'sinus_pressure', 'runny_nose', 'congestion', 
-        'fast_heart_rate', 'puffy_face_and_eyes', 'pain_during_bowel_movements', 
-        'pain_in_anal_region', 'irritation_in_anus', 'dizziness', 'bruising', 
-        'obesity', 'swollen_legs', 'swollen_blood_vessels', 'cramps'
+    "Loss of Sensory Functions": [
+        'loss_of_smell', 'visual_disturbances', 'runny_nose', 'redness_of_eyes', 'sinus_pressure', 
+        'dark_urine', 'yellow_urine', 'itching', 'patches_in_throat', 'rusty_sputum'
     ],
-    # Add more categories if needed
+    "Joint and Muscle Issues": [
+        'hip_joint_pain', 'muscle_weakness', 'stiff_neck', 'swelling_joints', 'painful_walking',
+        'muscle_pain', 'joint_pain', 'movement_stiffness', 'neck_pain', 'back_pain', 
+        'weakness_of_one_body_side', 'pain_in_anal_region'
+    ],
+    "Psychological Symptoms": [
+        'depression', 'irritability', 'lack_of_concentration', 'mood_swings', 'restlessness', 
+        'anxiety', 'lethargy', 'excessive_hunger', 'dizziness', 'irregular_sugar_level', 
+        'acute_liver_failure', 'coma'
+    ],
+    "Skin and Nail Issues": [
+        'inflammatory_nails', 'brittle_nails', 'skin_peeling', 'skin_rash', 'small_dents_in_nails',
+        'yellowish_skin', 'dischromic_patches', 'blister', 'foul_smell_of_urine', 'swollen_blood_vessels'
+    ],
+    "Respiratory and Nasal Problems": [
+        'blood_in_sputum', 'yellow_crust_ooze', 'nodal_skin_eruptions', 'slurred_speech', 'shivering', 
+        'sunken_eyes', 'breathlessness', 'cough', 'phlegm', 'congestion', 'fast_heart_rate'
+    ],
+    "Gastrointestinal Issues": [
+        'belly_pain', 'continuous_feel_of_urine', 'nausea', 'stomach_pain', 'loss_of_appetite', 
+        'stomach_bleeding', 'bloody_stool', 'dischromic _patches', 'abdominal_pain', 'constipation',
+        'diarrhoea', 'bladder_discomfort'
+    ],
+    "Cardiovascular Symptoms": [
+        'chest_pain', 'palpitations', 'history_of_alcohol_consumption', 'high_fever', 
+        'red_sore_around_nose', 'yellowing_of_eyes', 'watering_from_eyes', 'swollen_extremeties', 
+        'spotting_ urination', 'acute_liver_failure'
+    ],
+    "Neurological Symptoms": [
+        'unsteadiness', 'altered_sensorium', 'spinning_movements', 'weakness_in_limbs', 
+        'loss_of_balance', 'visual_disturbances', 'history_of_alcohol_consumption', 
+        'toxic_look_(typhos)', 'mucoid_sputum', 'swelling_of_stomach', 'swelled_lymph_nodes'
+    ],
+    "Other Symptoms": [
+        'malaise', 'irritability', 'family_history', 'scurring', 'blackheads', 'sweating', 
+        'burning_micturition', 'red_spots_over_body', 'extra_marital_contacts', 'phlegm', 
+        'muscle_wasting', 'weight_gain'
+    ]
 }
 
 # Create a Streamlit app
@@ -56,16 +63,17 @@ def main(feature_categories):
     st.title('Disease Prediction System')
 
     # Prediction form
-    st.sidebar.title('Predict Disease')
+    st.subheader('Select Symptoms')
     
     for category, features in feature_categories.items():
-        st.sidebar.subheader(category)
-        for i, feature in enumerate(features, start=1):
-            selected = st.sidebar.checkbox(feature, key=f"{category}-{i}")
-            if selected:
-                selected_features.append(feature)
+        # Add a collapsible section for each category
+        with st.beta_expander(category):
+            for i, feature in enumerate(features, start=1):
+                selected = st.checkbox(feature, key=f"{category}-{i}")
+                if selected:
+                    selected_features.append(feature)
 
-    if st.sidebar.button('Predict'):
+    if st.button('Predict'):
         if len(selected_features) == 0:
             st.error('Please select at least one symptom.')
         else:
