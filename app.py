@@ -61,7 +61,7 @@ def main(feature_categories):
     selected_features = []
 
     st.title('Disease Prediction System')
-    st.subheader('We are sad that you or your loved ones are unwell, thank you for choosing us toward your healing journey.')
+    st.write('We are sad that you or your loved ones are unwell, thank you for choosing us toward your healing journey.')
 
     # Prediction form
     st.subheader('Select Symptoms')
