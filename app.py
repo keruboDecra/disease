@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 import numpy as np
 from joblib import load
 
@@ -60,8 +59,6 @@ feature_categories = {
 def main(feature_categories):
     # Define selected_features outside the main function
     selected_features = []
-    is_expanded = False
-    last_toggled_time = 0
 
     st.title('Disease Prediction System')
 
@@ -70,41 +67,40 @@ def main(feature_categories):
     
     for category, features in feature_categories.items():
         # Add a collapsible section for each category
-        st.write(f"### {category}")
-        category_checkbox_states = []
-        for i, feature in enumerate(features, start=1):
-            selected = st.checkbox(feature, key=f"{category}-{i}")
-            category_checkbox_states.append(selected)
-        
-        selected_features.extend([feature for feature, selected in zip(features, category_checkbox_states) if selected])
-
+        with st.expander(category):
+            for i, feature in enumerate(features, start=1):
+                selected = st.checkbox(feature, key=f"{category}-{i}")
+                if selected:
+                    selected_features.append(feature)
+    
     # Add slider to adjust threshold
-    threshold = st.slider("Threshold", min_value=0.0, max_value=1.0, value=0.5, step=0.01, help="Adjust the threshold for prediction confidence")
+    threshold = st.slider("Threshold", min_value=0.1, max_value=0.9, value=0.5, step=0.1, format="%.1f")
+    
+    if st.button('Predict'):
+        # Create feature vector based on selected symptoms
+        feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
+        for symptom in selected_features:
+            for category_features in feature_categories.values():
+                if symptom in category_features:
+                    index = category_features.index(symptom)
+                    feature_vector[index] = 1
 
-    # Predict disease
-    if len(selected_features) >= 4:
-        feature_vector = np.zeros(len(feature_categories))
-        for feature in selected_features:
-            feature_vector[feature_categories.index(feature)] = 1
+        # Predict disease using the model
+        prediction_probabilities = best_model.predict_proba([feature_vector])[0]
         
-        prediction_proba = best_model.predict_proba([feature_vector])[0]
-        prediction = best_model.predict([feature_vector])[0]
-
-        st.subheader("Prediction")
-        st.write(f"Predicted Disease: {prediction}")
-        st.write(f"Confidence: {prediction_proba.max() * 100:.2f}%")
-
-        # Add a recommendation for more symptoms if less than 4 are selected
-    else:
-        st.warning("Please select at least 4 symptoms for accurate prediction.")
-
-    # Clear input button
+        # Set a threshold probability for prediction
+        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
+        
+        # Output prediction even if less than 4 symptoms are selected
+        st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
+        
+        if len(selected_features) < 4:
+            st.warning('For accurate prediction, please select at least 4 symptoms.')
+            st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
+    
+    # Add button to clear input selections
     if st.button("Clear Input"):
         selected_features.clear()
-
-    # Collapse the expanders after 10 seconds
-    if time.time() - last_toggled_time > 10:
-        is_expanded = False
 
 if __name__ == '__main__':
     main(feature_categories)
