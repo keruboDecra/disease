@@ -110,7 +110,7 @@ def main(feature_categories):
 # Add logo to sidebar
 st.sidebar.image("pic.png", use_column_width=True)
 # Add sidebar with optional buttons and logo
-st.sidebar.title("Options")
+st.sidebar.title("How can we Help 🙋")
 if st.sidebar.button("Get a Health Professional Around Me"):
     st.sidebar.write("Please visit [this page](https://rw.britam.com/help/other-services/locate-a-branch) to locate a branch.")
 if st.sidebar.button("Translate Symptoms to English"):
