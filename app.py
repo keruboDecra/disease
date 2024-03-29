@@ -26,34 +26,7 @@ feature_categories = {
         'anxiety', 'lethargy', 'excessive_hunger', 'dizziness', 'irregular_sugar_level', 
         'acute_liver_failure', 'coma'
     ],
-    "Skin and Nail Issues": [
-        'inflammatory_nails', 'brittle_nails', 'skin_peeling', 'skin_rash', 'small_dents_in_nails',
-        'yellowish_skin', 'dischromic_patches', 'blister', 'foul_smell_of_urine', 'swollen_blood_vessels'
-    ],
-    "Respiratory and Nasal Problems": [
-        'blood_in_sputum', 'yellow_crust_ooze', 'nodal_skin_eruptions', 'slurred_speech', 'shivering', 
-        'sunken_eyes', 'breathlessness', 'cough', 'phlegm', 'congestion', 'fast_heart_rate'
-    ],
-    "Gastrointestinal Issues": [
-        'belly_pain', 'continuous_feel_of_urine', 'nausea', 'stomach_pain', 'loss_of_appetite', 
-        'stomach_bleeding', 'bloody_stool', 'dischromic _patches', 'abdominal_pain', 'constipation',
-        'diarrhoea', 'bladder_discomfort'
-    ],
-    "Cardiovascular Symptoms": [
-        'chest_pain', 'palpitations', 'history_of_alcohol_consumption', 'high_fever', 
-        'red_sore_around_nose', 'yellowing_of_eyes', 'watering_from_eyes', 'swollen_extremeties', 
-        'spotting_ urination', 'acute_liver_failure'
-    ],
-    "Neurological Symptoms": [
-        'unsteadiness', 'altered_sensorium', 'spinning_movements', 'weakness_in_limbs', 
-        'loss_of_balance', 'visual_disturbances', 'history_of_alcohol_consumption', 
-        'toxic_look_(typhos)', 'mucoid_sputum', 'swelling_of_stomach', 'swelled_lymph_nodes'
-    ],
-    "Other Symptoms": [
-        'malaise', 'irritability', 'family_history', 'scurring', 'blackheads', 'sweating', 
-        'burning_micturition', 'red_spots_over_body', 'extra_marital_contacts', 'phlegm', 
-        'muscle_wasting', 'weight_gain'
-    ]
+    # Add other categories...
 }
 
 # Create a Streamlit app
@@ -72,7 +45,7 @@ def main(feature_categories):
     
     for category, features in feature_categories.items():
         # Add a collapsible section for each category
-        with st.beta_expander(category):
+        with st.expander(category):
             for i, feature in enumerate(features, start=1):
                 selected = st.checkbox(feature, key=f"{category}-{i}")
                 if selected:
