@@ -14,29 +14,21 @@ top_features = [
     "yellowing_of_eyes", "muscle_pain", "mild_fever", "neck_pain"
 ]
 
-# Create a Streamlit app
 def main():
-    st.title('Disease Prediction System')
-
-    # Display top features
-    st.subheader('Top Features:')
-    for i, feature in enumerate(top_features, start=1):
-        st.write(f"{i}. {feature}")
-
-    # Prediction form
-    st.sidebar.title('Predict Disease')
-    selected_features = []
-
-    for i, feature in enumerate(top_features, start=1):
-        selected = st.sidebar.checkbox(feature, key=i)
-        if selected:
-            selected_features.append(feature)
+    # Existing code here...
 
     if st.sidebar.button('Predict'):
         if len(selected_features) == 0:
             st.error('Please select at least one symptom.')
         else:
-            prediction = best_model.predict([selected_features])
+            # Create feature vector based on selected symptoms
+            feature_vector = np.zeros(len(top_features))
+            for symptom in selected_features:
+                index = top_features.index(symptom)
+                feature_vector[index] = 1
+
+            # Predict disease using the model
+            prediction = best_model.predict([feature_vector])
             st.success(f'Predicted Disease: {prediction[0]}')
 
 if __name__ == '__main__':
