@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from joblib import load
 
 # Load the best model
@@ -14,8 +15,25 @@ top_features = [
     "yellowing_of_eyes", "muscle_pain", "mild_fever", "neck_pain"
 ]
 
+# Create a Streamlit app
 def main():
-    # Existing code here...
+    # Define selected_features outside the main function
+    selected_features = []
+
+    st.title('Disease Prediction System')
+
+    # Display top features
+    st.subheader('Top Features:')
+    for i, feature in enumerate(top_features, start=1):
+        st.write(f"{i}. {feature}")
+
+    # Prediction form
+    st.sidebar.title('Predict Disease')
+    
+    for i, feature in enumerate(top_features, start=1):
+        selected = st.sidebar.checkbox(feature, key=i)
+        if selected:
+            selected_features.append(feature)
 
     if st.sidebar.button('Predict'):
         if len(selected_features) == 0:
