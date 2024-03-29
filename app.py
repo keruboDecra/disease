@@ -110,10 +110,8 @@ def main(feature_categories):
 # Add sidebar with optional buttons
 st.sidebar.title("How can we help?")
 if st.sidebar.button("Get a Health Professional Around Me"):
-    st.sidebar.write("Redirecting you to find a health professional...")
     st.sidebar.write("Please visit [this page](https://rw.britam.com/help/other-services/locate-a-branch) to locate a branch.")
-if st.sidebar.button("Translate Symptoms to English"):
-    st.sidebar.write("Redirecting you to translate symptoms...")
+if st.sidebar.button("Translate my Symptoms to English"):
     st.sidebar.write("Please visit [this page](https://translate.google.com/?sl=rw&tl=en&text=umva&op=translate) to translate your symptoms.")
 
 
