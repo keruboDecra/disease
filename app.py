@@ -78,7 +78,7 @@ def main(feature_categories):
             st.error('Please select at least one symptom.')
         else:
             # Create feature vector based on selected symptoms
-            feature_vector = np.zeros(sum(len(features) for features in feature_categories.values()))
+            feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
             for symptom in selected_features:
                 for category_features in feature_categories.values():
                     if symptom in category_features:
