@@ -94,7 +94,7 @@ def main(feature_categories):
         # Output prediction even if less than 4 symptoms are selected
         st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
         
-        if 1 <= len(selected_features) < 4:
+        if 1 => len(selected_features) < 4:
 
             st.warning('For accurate prediction, please select at least 4 symptoms.')
             st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
