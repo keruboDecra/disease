@@ -49,9 +49,22 @@ feature_categories = {
         'toxic_look_(typhos)', 'mucoid_sputum', 'swelling_of_stomach', 'swelled_lymph_nodes'
     ],
     "Other Symptoms": [
-        'malaise', 'irritability', 'family_history', 'scurring', 'blackheads', 'sweating', 
-        'burning_micturition', 'red_spots_over_body', 'extra_marital_contacts', 'phlegm', 
-        'muscle_wasting', 'weight_gain'
+        'increased_appetite', 'malaise', 'enlarged_thyroid', 'unsteadiness', 'belly_pain', 
+        'continuous_feel_of_urine', 'receiving_unsterile_injections', 'dark_urine', 'family_history', 
+        'stomach_bleeding', 'pus_filled_pimples', 'sunken_eyes', 'dischromic _patches', 'continuous_sneezing', 
+        'knee_pain', 'dehydration', 'blackheads', 'burning_micturition', 'red_spots_over_body', 
+        'extra_marital_contacts', 'spinning_movements', 'bladder_discomfort', 'red_sore_around_nose', 
+        'yellowish_skin', 'indigestion', 'headache', 'constipation', 'scurring', 'pain_behind_the_eyes', 
+        'silver_like_dusting', 'vomiting', 'small_dents_in_nails', 'chills', 'acidity', 'ulcers_on_tongue', 
+        'muscle_wasting', 'spotting_ urination', 'fatigue', 'weight_gain', 'cold_hands_and_feets', 'mood_swings', 
+        'yellow_urine', 'throat_irritation', 'acute_liver_failure', 'loss_of_balance', 'excessive_hunger', 
+        'drying_and_tingling_lips', 'palpitations', 'history_of_alcohol_consumption', 'stiff_neck', 
+        'distention_of_abdomen', 'coma', 'brittle_nails', 'foul_smell_of urine', 'passage_of_gases', 
+        'receiving_blood_transfusion', 'toxic_look_(typhos)', 'mucoid_sputum', 'polyuria', 'abnormal_menstruation', 
+        'swollen_extremeties', 'painful_walking', 'fluid_overload', 'weakness_in_limbs', 'swelling_of_stomach', 
+        'swelled_lymph_nodes', 'blurred_and_distorted_vision', 'phlegm', 'redness_of_eyes', 'runny_nose', 'puffy_face_and_eyes', 
+        'pain_during_bowel_movements', 'pain_in_anal_region', 'irritation_in_anus', 'dizziness', 'bruising', 'obesity', 
+        'swollen_legs', 'swollen_blood_vessels', 'cramps'
     ]
 }
 
@@ -87,7 +100,4 @@ def main(feature_categories):
 
             # Predict disease using the model
             prediction = best_model.predict([feature_vector])
-            st.success(f'Predicted Disease: {prediction[0]}')
-
-if __name__ == '__main__':
-    main(feature_categories)
+            st.success(f'Predicted Disease: {
