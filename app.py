@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 from joblib import load
-import webbrowser
 
 # Suppress warning about invalid feature names
 import warnings
@@ -108,23 +107,17 @@ def main(feature_categories):
     if st.button("Clear Input"):
         selected_features.clear()
 
-    # Conversation tool in the side panel
-    st.sidebar.title("Chat with a Professional")
-    message = st.sidebar.text_area("Type your message here:")
-    if st.sidebar.button("Send"):
-        # Process the user's message (you can implement this part)
-        pass
-
-    # Optional buttons
-    if st.sidebar.button("Get a Health Professional Around Me"):
-        webbrowser.open_new_tab("https://rw.britam.com/help/other-services/locate-a-branch")
-
-    if st.sidebar.button("Translate Symptoms to English"):
-        webbrowser.open_new_tab("https://translate.google.com/?sl=rw&tl=en&text=umva&op=translate")
-
-    if st.sidebar.button("Understand More about Predicted Disease"):
-        # Search an API and give the user an article (you can implement this part)
-        pass
+# Add sidebar with optional buttons
+st.sidebar.title("Options")
+if st.sidebar.button("Get a Health Professional Around Me"):
+    st.sidebar.write("Redirecting you to find a health professional...")
+    st.sidebar.write("Please visit [this page](https://rw.britam.com/help/other-services/locate-a-branch) to locate a branch.")
+if st.sidebar.button("Translate Symptoms to English"):
+    st.sidebar.write("Redirecting you to translate symptoms...")
+    st.sidebar.write("Please visit [this page](https://translate.google.com/?sl=rw&tl=en&text=umva&op=translate) to translate your symptoms.")
+if st.sidebar.button("Understand More about Predicted Disease"):
+    st.sidebar.write("Searching for more information...")
+    # Placeholder for searching an API and providing an article
 
 if __name__ == '__main__':
     if len(feature_categories) == 0:
