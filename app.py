@@ -107,6 +107,8 @@ def main(feature_categories):
     if st.button("Clear Input"):
         selected_features.clear()
 
+# Add logo to sidebar
+st.sidebar.image("pic.png", use_column_width=True)
 # Add sidebar with optional buttons and logo
 st.sidebar.title("Options")
 if st.sidebar.button("Get a Health Professional Around Me"):
@@ -115,8 +117,6 @@ if st.sidebar.button("Translate Symptoms to English"):
     st.sidebar.write("Please visit [this page](https://translate.google.com/?sl=rw&tl=en&text=umva&op=translate) to translate your symptoms.")
 
 
-# Add logo to sidebar
-st.sidebar.image("pic.png", use_column_width=True)
 
 if __name__ == '__main__':
     if len(feature_categories) == 0:
