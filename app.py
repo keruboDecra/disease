@@ -59,6 +59,9 @@ feature_categories = {
 def main(feature_categories):
     # Define selected_features outside the main function
     selected_features = []
+    
+    # Sidebar for adjusting threshold
+    threshold = st.sidebar.slider('Threshold', min_value=0.0, max_value=1.0, value=0.5, step=0.01)
 
     st.title('Disease Prediction System')
 
@@ -85,11 +88,9 @@ def main(feature_categories):
         # Predict disease using the model
         prediction_probabilities = best_model.predict_proba([feature_vector])[0]
         
-        # Set a threshold probability for prediction
-        threshold = 0.3
+        # Output prediction based on adjusted threshold
         predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
         
-        # Output prediction even if less than 4 symptoms are selected
         st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
         
         if len(selected_features) < 4:
