@@ -1,6 +1,9 @@
 import streamlit as st
 import numpy as np
 from joblib import load
+from streamlit.hashing import _CodeHasher
+from streamlit.server.server import Server
+import json
 
 # Suppress warning about invalid feature names
 import warnings
@@ -55,51 +58,68 @@ feature_categories = {
     ]
 }
 
+# Function to get the session state
+def get_session():
+    session = Server.get_current()._get_session_info_hash()
+    return session
+
 # Create a Streamlit app
 def main():
-    # Define selected_features outside the main function
-    selected_features = []
-    
-    # Sidebar for adjusting threshold
-    threshold = st.sidebar.slider('Threshold', min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+    session_id = get_session()
+
+    # Define selected_features in session state
+    if 'selected_features' not in session_id:
+        session_id['selected_features'] = []
 
     st.title('Disease Prediction System')
 
+    # Sidebar for adjusting threshold and clearing input
+    threshold = st.sidebar.slider('Threshold', min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+    if st.sidebar.button('Clear Input'):
+        session_id['selected_features'] = []
+    
     # Prediction form
     st.subheader('Select Symptoms')
     
     for category, features in feature_categories.items():
-        # Add a collapsible section for each category
-        with st.expander(category):
-            for i, feature in enumerate(features, start=1):
-                selected = st.checkbox(feature, key=f"{category}-{i}")
-                if selected:
-                    selected_features.append(feature)
+        # Add a collapsible section for each feature category
+        with st.beta_expander(category):
+            for symptom in features:
+                if st.checkbox(symptom):
+                    if symptom not in session_id['selected_features']:
+                        session_id['selected_features'].append(symptom)
+                    else:
+                        st.warning(f"{symptom} is already selected.")
+                else:
+                    if symptom in session_id['selected_features']:
+                        session_id['selected_features'].remove(symptom)
+    
+    selected_features = session_id['selected_features']
+    feature_vector = np.zeros(132)
 
-    if st.button('Predict'):
-        # Create feature vector based on selected symptoms
-        feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
-        for symptom in selected_features:
-            for category_features in feature_categories.values():
-                if symptom in category_features:
-                    index = category_features.index(symptom)
-                    feature_vector[index] = 1
+    for symptom in selected_features:
+        feature_index = all_features.index(symptom)
+        feature_vector[feature_index] = 1
 
-        # Predict disease using the model
-        prediction_probabilities = best_model.predict_proba([feature_vector])[0]
-        
-        # Output prediction based on adjusted threshold
-        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
-        
-        st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
-        
-        if len(selected_features) < 4:
-            st.warning('For accurate prediction, please select at least 4 symptoms.')
-            st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
+    # Make prediction
+    prediction_proba = best_model.predict_proba([feature_vector])[0]
+    prediction_class = best_model.classes_[np.argmax(prediction_proba)]
+    max_proba = np.max(prediction_proba)
 
-    # Clear button for clearing existing input
+    # Output prediction result
+    st.write(f"Predicted Disease Class: {prediction_class}")
+    st.write(f"Probability: {max_proba:.2f}")
+
+    # Recommendation for more symptoms if less than 4 symptoms selected
+    if len(selected_features) < 4:
+        st.write("We recommend selecting more symptoms for accurate results.")
+
+    # Clear button
     if st.button('Clear Input'):
-        st.caching.clear_cache()
+        # Clear selected features and reload page
+        session_id['selected_features'] = []
+        st.experimental_rerun()
 
+# Run the app
 if __name__ == '__main__':
     main()
