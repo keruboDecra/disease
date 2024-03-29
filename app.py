@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 from joblib import load
+import webbrowser
 
 # Suppress warning about invalid feature names
 import warnings
@@ -112,6 +113,17 @@ def main(feature_categories):
     message = st.sidebar.text_area("Type your message here:")
     if st.sidebar.button("Send"):
         # Process the user's message (you can implement this part)
+        pass
+
+    # Optional buttons
+    if st.sidebar.button("Get a Health Professional Around Me"):
+        webbrowser.open_new_tab("https://rw.britam.com/help/other-services/locate-a-branch")
+
+    if st.sidebar.button("Translate Symptoms to English"):
+        webbrowser.open_new_tab("https://translate.google.com/?sl=rw&tl=en&text=umva&op=translate")
+
+    if st.sidebar.button("Understand More about Predicted Disease"):
+        # Search an API and give the user an article (you can implement this part)
         pass
 
 if __name__ == '__main__':
