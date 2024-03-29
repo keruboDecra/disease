@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 import numpy as np
 from joblib import load
 
@@ -59,6 +60,8 @@ feature_categories = {
 def main(feature_categories):
     # Define selected_features outside the main function
     selected_features = []
+    is_expanded = False
+    last_toggled_time = 0
 
     st.title('Disease Prediction System')
 
@@ -67,7 +70,8 @@ def main(feature_categories):
     
     for category, features in feature_categories.items():
         # Add a collapsible section for each category
-        with st.expander(category):
+        with st.expander(category, expanded=is_expanded):
+            last_toggled_time = time.time()
             for i, feature in enumerate(features, start=1):
                 selected = st.checkbox(feature, key=f"{category}-{i}")
                 if selected:
@@ -101,6 +105,10 @@ def main(feature_categories):
     # Add button to clear input selections
     if st.button("Clear Input"):
         selected_features.clear()
+
+    # Collapse the expanders after 10 seconds
+    if time.time() - last_toggled_time > 10:
+        is_expanded = False
 
 if __name__ == '__main__':
     main(feature_categories)
