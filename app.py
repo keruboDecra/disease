@@ -70,7 +70,7 @@ def main(feature_categories):
     
     for category, features in feature_categories.items():
         # Add a collapsible section for each category
-        with st.expander(category, expanded=is_expanded):
+        with st.expander(category, expanded=is_expanded, timeout=10000):  # 10 seconds timeout
             last_toggled_time = time.time()
             for i, feature in enumerate(features, start=1):
                 selected = st.checkbox(feature, key=f"{category}-{i}")
