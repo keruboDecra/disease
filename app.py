@@ -79,9 +79,6 @@ def main(feature_categories):
                 if selected:
                     selected_features.append(feature)
 
-    # SessionState to track threshold value
-    session_state = SessionState.get(threshold=0.5)
-
     if st.button('Predict'):
         # Create feature vector based on selected symptoms
         feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
@@ -95,32 +92,15 @@ def main(feature_categories):
         prediction_probabilities = best_model.predict_proba([feature_vector])[0]
         
         # Output prediction based on adjusted threshold
-        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
+        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob >= threshold]
+        st.write("Predicted Diseases:", predicted_diseases)
+
+        # Recommendation for additional symptoms
+        if len(selected_features) < 4:
+            st.write("We recommend selecting more symptoms for accurate results.")
         
-        # Cache the prediction result and selected symptoms
-        prediction_cache[selected_features] = predicted_diseases
-
-        st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
-
-    # Button to clear input and prediction result
-    if st.button('Clear Input and Prediction'):
-        session_state.threshold = 0.5
-        selected_features = []
-        prediction_cache.clear()
-
-    # Display recommendation for additional symptoms if the threshold is below 4
-    if len(selected_features) < 4:
-        st.warning('For accurate prediction, please select at least 4 symptoms.')
-        st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
-
-    # Display selected symptoms
-    st.write("Selected Symptoms:", selected_features)
-
-    # Adjust threshold across sessions
-    session_state.threshold = threshold
-
-    # Display prediction result
-    st.write("Predicted Diseases:", prediction_cache[selected_features])
+        # Update threshold value in session state
+        session_state.threshold = threshold
 
 # Class for tracking threshold value across sessions
 class SessionState:
