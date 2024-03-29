@@ -55,29 +55,17 @@ feature_categories = {
     ]
 }
 
-# Prediction function
-def predict_disease(selected_features, threshold):
-    # Create feature vector based on selected symptoms
-    feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
-    for symptom in selected_features:
-        for category_features in feature_categories.values():
-            if symptom in category_features:
-                index = category_features.index(symptom)
-                feature_vector[index] = 1
-
-    # Predict disease using the model
-    prediction_probabilities = best_model.predict_proba([feature_vector])[0]
-    
-    # Output prediction based on adjusted threshold
-    predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
-    
-    return predicted_diseases
-
 # Create a Streamlit app
 def main(feature_categories):
     # Define selected_features outside the main function
     selected_features = []
     
+    # Cache for storing prediction result and selected symptoms
+    prediction_cache = st.cache(allow_output_mutation=True)
+
+    # Sidebar for adjusting threshold
+    threshold = st.sidebar.slider('Threshold', min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+
     st.title('Disease Prediction System')
 
     # Prediction form
@@ -91,28 +79,52 @@ def main(feature_categories):
                 if selected:
                     selected_features.append(feature)
 
-    # Sidebar for adjusting threshold
-    threshold = st.sidebar.slider('Threshold', min_value=0.0, max_value=1.0, value=0.5, step=0.01)
+    # SessionState to track threshold value
+    session_state = SessionState.get(threshold=0.5)
 
-    # Prediction output
-    prediction_output = st.empty()
-    
-    # Button to clear input
-    if st.button('Clear Input'):
-        selected_features.clear()
-        prediction_output.empty()
+    if st.button('Predict'):
+        # Create feature vector based on selected symptoms
+        feature_vector = np.zeros(132)  # Ensure feature vector length matches the model's input size
+        for symptom in selected_features:
+            for category_features in feature_categories.values():
+                if symptom in category_features:
+                    index = category_features.index(symptom)
+                    feature_vector[index] = 1
 
-    # If selected features are not empty, predict diseases
-    if selected_features:
-        # Make prediction and update output
-        predicted_diseases = predict_disease(selected_features, threshold)
+        # Predict disease using the model
+        prediction_probabilities = best_model.predict_proba([feature_vector])[0]
         
-        prediction_output.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
+        # Output prediction based on adjusted threshold
+        predicted_diseases = [disease for disease, prob in zip(best_model.classes_, prediction_probabilities) if prob > threshold]
         
-        # If selected features are less than 4, recommend adding more symptoms
-        if len(selected_features) < 4:
-            prediction_output.warning('For accurate prediction, please select at least 4 symptoms.')
-            prediction_output.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
+        # Cache the prediction result and selected symptoms
+        prediction_cache[selected_features] = predicted_diseases
+
+        st.success(f'Predicted Diseases (above {threshold * 100}% probability): {predicted_diseases}')
+
+    # Button to clear input and prediction result
+    if st.button('Clear Input and Prediction'):
+        session_state.threshold = 0.5
+        selected_features = []
+        prediction_cache.clear()
+
+    # Display recommendation for additional symptoms if the threshold is below 4
+    if len(selected_features) < 4:
+        st.warning('For accurate prediction, please select at least 4 symptoms.')
+        st.write("Based on the selected symptoms, we recommend consulting a healthcare professional for further evaluation and diagnosis.")
+
+    # Display selected symptoms
+    st.write("Selected Symptoms:", selected_features)
+
+    # Adjust threshold across sessions
+    session_state.threshold = threshold
+
+    # Display prediction result
+    st.write("Predicted Diseases:", prediction_cache[selected_features])
+
+# Class for tracking threshold value across sessions
+class SessionState:
+    threshold = 0.5
 
 if __name__ == '__main__':
     main(feature_categories)
