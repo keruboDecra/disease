@@ -11,7 +11,10 @@ Project Team:
 Video Walkthrough:
 https://drive.google.com/file/d/1p3yCjHie53NHhcxUIta7M3l2mgKd5mFv/view?usp=sharing
 
+Streamlit App:
+https://dppk8bnc5hrlku9bqurm24.streamlit.app/
+
 Project Dataset
 https://colab.research.google.com/corgiredirector?site=http%3A%2F%2Fpeople.dbmi.columbia.edu%2F%7Efriedma%2FProjects%2FDiseaseSymptomKB%2Findex.html
 
-We are leveraging Machine Learning to mine data from patterns observed in users' symptoms. The accuracy of the project is at 0.99%, indicating strong performance in making predictions.
+We are using Machine Learning to mine data from user symptom patterns. The accuracy of the project is at 0.99%, indicating strong performance in making predictions.
